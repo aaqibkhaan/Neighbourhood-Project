@@ -180,6 +180,42 @@ var map;
           infowindow.setContent('');
           infowindow.marker = marker;
 
+       function getFlickrImage(){
+        // Construct the URL to make the AJAX request to Flickr's servers
+        var flickr_url = "https://api.flickr.com/services/rest/?" +
+                        "method=flickr.photos.search&" +
+                        // Your API key goes here
+                        "api_key=7d94577e4579425282f741c40563afb7&" +
+                        "per_page=10&format=json&nojsoncallback=1&text=";
+        // Search for the name of the location for a picture.
+        flickr_url += encodeURIComponent(marker.title.trim());
+
+        // Construct the info window's content
+        var infoWindowContent = '<h3 class="description">' + "Attraction NAME    :   " + marker.title + "<br>"+ "Attraction Address    :   "+ marker.streetAddress + '</h3>';
+        infoWindowContent += 'Flickr Images: <br>';
+
+        $.getJSON(flickr_url, function(data) {
+            // Process the list of photos returned by the API call to Flickr
+            $.each(data.photos.photo, function(i, item) {
+                // To show the image we must construct the URL that points
+                // to the image's location.
+                var img_url = 'https://farm' + item.farm +
+                             '.staticflickr.com/' + item.server +
+                             '/' + item.id + '_' +
+                             item.secret + '.jpg';
+                // Add the image to the info window
+                infoWindowContent += '<img class="flickr-img" src="' + img_url + '">';
+                infowindow.setContent(infoWindowContent);
+
+            });
+        }).fail(function() {
+            // Display this message if the API call fakes
+            infoWindowContent += 'Could not load image.';
+            infowindow.setContent(infoWindowContent);
+        });
+
+}
+    getFlickrImage();
   // Open the infowindow on the correct marker.
     infowindow.open(map, marker);
 
@@ -231,15 +267,10 @@ var map;
 
 
 var viewModel = function() {
-
     var self = this;
-
-// observables for storing markers in an Array and SearchBox (Query) from HTML
-
     this.markersArray = ko.observableArray([]);
     this.searchBox = ko.observable("");
-// Storing all the locations object into markersArray
-
+    
     for (var i = 0; i < locations.length; i++) {
         self.markersArray.push(locations[i]);
         console.log("Iam inside MARKERS ARRAY");
@@ -254,7 +285,6 @@ var viewModel = function() {
             console.log("Iam inside VM IF");
         } else {
             hideListings();
-            // KnockOut Function for Filtering an array 
             return ko.utils.arrayFilter(self.markersArray(), function (location) {
                 
                 if (location.title.toLowerCase().indexOf(q) >= 0) {
@@ -268,7 +298,6 @@ var viewModel = function() {
 
 }
 
-// If Google Map Api is not loading
 function mapErrorHandler() {
-    document.getElementById('map').innerHTML = "Error in Google Maps, Please refresh and try again";
+    document.getElementById('map').innerHTML = "Google map API not working";
 }
