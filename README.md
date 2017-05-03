@@ -5,7 +5,7 @@ Neighbour Hood Map is a single page interactive map application displaying some 
 ### Running the Project
 * You can clone the repo from https://github.com/aaqibkhaan/Neighbourhood-Project.git on to your Desktop.
 * You can [download]( https://github.com/aaqibkhaan/Neighbourhood-Project/archive/master.zip) the repo , unzip it and run index.html
-* You can see the live site [here](https://github.com/aaqibkhaan/Neighbourhood-Project/archive/master.zip)
+* You can see the live site [here](https://aaqibkhaan.github.io/Neighbourhood-Project/)
 
 ### Libraries used
 * [Knockout.js](http://knockoutjs.com/)
