@@ -8,13 +8,12 @@
 </head>
 <body>
     <div id="side-bar">
-        <h3>SEARCH LONDON</h3>
-        <br>
+        <h3>LONDON SITE SEEING MAP</h3>
         <input type="text" class="text-input" data-bind="textInput: searchBox">
         <br>
         <div id="locations">
             <ul data-bind="foreach: searchSites">
-                <li><span data-bind="text: title, click:$parent.selectedLocation"></span></li>
+                <a class="b-color" href="#"><li data-bind="click:$parent.clickedMarker"><span data-bind="text: title"></span></li></a>
             </ul>
         </div>
     </div>
