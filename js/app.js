@@ -93,7 +93,7 @@ var map;
         // Constructor creates a new map - only center and zoom are required.
         map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 51.501364, lng: -0.141890},
-          zoom: 12,
+          zoom: 10,
           styles: styles,
           mapTypeControl: false
         });
@@ -191,7 +191,7 @@ var map;
         flickr_url += encodeURIComponent(marker.title.trim());
 
         // Construct the info window's content
-        var infoWindowContent = '<h3 class="description">' + "Attraction NAME    :   " + marker.title + "<br>"+ "Attraction Address    :   "+ marker.streetAddress + '</h3>';
+        var infoWindowContent = '<h3 class="b-color">' + "Attraction NAME    :   " + marker.title + "<br>"+ "Attraction Address    :   "+ marker.streetAddress + '</h3>';
         infoWindowContent += 'Flickr Images: <br>';
 
         $.getJSON(flickr_url, function(data) {
@@ -295,6 +295,13 @@ var viewModel = function() {
             });
         }
     });
+
+    this.clickedMarker = function () {
+
+        this.googleMarker.map.setCenter(this.googleMarker.position);
+        this.googleMarker.map.setZoom(16);
+        populateInfoWindow(this.googleMarker, largeInfowindow);
+    };
 
 }
 
