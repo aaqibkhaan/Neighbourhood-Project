@@ -7,6 +7,11 @@
   /* .sideBar {position: relative; float: left; width: 200px}
    */
   
+  .strong-red {
+    color: #f00;
+    font-weight: bold;
+
+  }
   #map {
       bottom: 0px;
       height: 100%;
