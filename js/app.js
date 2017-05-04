@@ -209,12 +209,14 @@ function initMap() {
         locations[i].googleMarker = marker;
 
     }
-    // Making sure Map fits within Bounds
-    map.fitBounds(bounds);
+    // Making sure Map fits within Bounds and  map display responsively
+ google.maps.event.addDomListener(window, 'resize', function() {
+  map.fitBounds(bounds); // `bounds` is a `LatLngBounds` object
+});
 
     // Applying KnockOut 
 
-    ko.applyBindings(new viewModel());
+    ko.applyBindings(new ViewModel());
 }
 
 function toggleBounce(markerref) {
@@ -223,11 +225,12 @@ function toggleBounce(markerref) {
     } else {
         markerref.setAnimation(google.maps.Animation.BOUNCE);
         setTimeout(function() {
-            markerref.setAnimation(null)
+            markerref.setAnimation(null);
         }, 2000);
 
     }
 }
+
 
 // This function populates the infowindow when the marker is clicked. We'll only allow
 // one infowindow which will open at the marker that is clicked, and populate based
@@ -239,7 +242,7 @@ function populateInfoWindow(marker, infowindow) {
         infowindow.setContent('');
         infowindow.marker = marker;
 
-        function getFlickrImage() {
+       var getFlickrImage = function () {
             // URL for making the AJAX request to the Flickr's Server
             var flickr_url = "https://api.flickr.com/services/rest/?" +
                 "method=flickr.photos.search&" +
@@ -250,7 +253,7 @@ function populateInfoWindow(marker, infowindow) {
 
             // Info Window Contruction
             var infoWindowContent = '<h3 class="b-color">' + "Attraction NAME    :   " + marker.title + "<br>" + "Attraction Address    :   " + marker.streetAddress + '</h3>';
-            infoWindowContent += 'Flickr Images: <br>';
+            infoWindowContent += '<p class="strong-red"> Images Powered by Flickr: <p>';
             // JSON request to Flickr server
             $.getJSON(flickr_url, function(data) {
                 // Rertive all the photos returned by the flickr API call
@@ -274,6 +277,7 @@ function populateInfoWindow(marker, infowindow) {
         }
         getFlickrImage();
         // Open the infowindow on the correct marker.
+        map.panTo(marker.getPosition());
         infowindow.open(map, marker);
 
         // Make sure the marker property is cleared if the infowindow is closed.
@@ -325,10 +329,10 @@ function makeMarkerIcon(markerColor) {
 
 // Knock OUt Js ViewModel Approach
 
-var viewModel = function() {
+var ViewModel = function() {
     var self = this;
     this.markersArray = ko.observableArray([]);
-    this.searchBox = ko.observable("");
+    this.searchBox = ko.observable('');
 
     // Copying all the locations data to Observable MarkersArray    
     for (var i = 0; i < locations.length; i++) {
@@ -342,7 +346,6 @@ var viewModel = function() {
         if (self.searchBox() === "") {
             visible();
             return self.markersArray();
-            console.log("Iam inside VM IF");
         } else {
             hideListings();
             // KO filter array function
@@ -365,7 +368,7 @@ var viewModel = function() {
         populateInfoWindow(this.googleMarker, largeInfowindow);
     };
 
-}
+};
 // Function for Google Error
 function mapErrorHandler() {
     document.getElementById('map').innerHTML = "Google map API not working";
