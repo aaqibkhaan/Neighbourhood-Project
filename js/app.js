@@ -226,7 +226,7 @@ function toggleBounce(markerref) {
         markerref.setAnimation(google.maps.Animation.BOUNCE);
         setTimeout(function() {
             markerref.setAnimation(null);
-        }, 2000);
+        }, 2100);
 
     }
 }
